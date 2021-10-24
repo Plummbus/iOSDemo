@@ -10,8 +10,11 @@ public class Player : MonoBehaviour
     public AudioClip damage;
 
     public Rigidbody rb;
+    public GameObject sceneManager;
+    public float rotateModifier;
 
-    
+
+
     private void Update()
     {
 #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
@@ -21,6 +24,7 @@ public class Player : MonoBehaviour
             directionalSpeed * Time.deltaTime);
 #endif
         rb.velocity = Vector3.forward * 1000 * Time.deltaTime;
+        transform.Rotate(Vector3.right * GetComponent<Rigidbody>().velocity.z / rotateModifier); //rotateModifier is just a modifier for our rotate speed
 
         //MOBILE CONTROLS
         //a finger works as a substitue for the mouse
@@ -41,6 +45,7 @@ public class Player : MonoBehaviour
         if (other.gameObject.tag == "triangle")
         {
             GetComponent<AudioSource>().PlayOneShot(damage, 1.0f);
+            sceneManager.GetComponent<App_Initialize>().GameOver();
         }
     }
 }
